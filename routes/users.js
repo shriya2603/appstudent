@@ -6,6 +6,7 @@ const passportConf              = require('../passport');
 
 const { validateBody, schemas } = require('../helpers/routeHelpers');
 const UsersController           = require('../controllers/users');
+const QuizController           = require('../controllers/quiz');
 const passportSignIn            = passport.authenticate('local', { session: false });
 const passportJWT               = passport.authenticate('jwt', { session: false });
 
@@ -40,5 +41,14 @@ router.route('/view/:id')
 
 router.route('/changePassword/:id')//
   .post(UsersController.changePassword);
+
+
+
+  router.route('/index')
+    .get((req, res)=>res.render('index'));
+  
+  router.route('/uploadImage')
+    .post(QuizController.uploadImage);
+
 
 module.exports = router;

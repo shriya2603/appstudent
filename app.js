@@ -2,6 +2,9 @@ const express       = require('express');
 const morgan        = require('morgan');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
+
+const ejs 			= require('ejs');
+const path			= require('path');
 const app = express();
 
 //
@@ -14,7 +17,9 @@ mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-
+//view 
+app.set('view engine', 'ejs');
+app.use(express.static('./public'));
 
 //routes
 app.use('/users',require('./routes/users'));
