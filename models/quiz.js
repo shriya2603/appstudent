@@ -3,11 +3,30 @@ const Schema        = mongoose.Schema;
 
 const quizSchema = new Schema({
     question:{type:String},
-    answer:{type:String},
+    option1:{
+      option1:{type:String},
+      point:{type:Number}
+    },
+    option2:{
+      option2:{type:String},
+      point:{type:Number}
+    },
+    option3:{
+      option3:{type:String},
+      point:{type:Number}
+    },
+    option4:{
+      option4:{type:String},
+      point:{type:Number}
+    },
+    rightAnswer:{type:String},
     imageName:{type:String},
-    thematic:{type:String},
-    createdAt:{type: Date, 
-		default: Date.now()}
+    yogaSutra:{type:String},
+    thematic:{type:String,required: true},
+    createdAt:{
+      type: Date, 
+      default: Date.now()
+    }
 
 });
 

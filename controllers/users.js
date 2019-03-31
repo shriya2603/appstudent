@@ -5,12 +5,12 @@ const bcrypt        = require('bcryptjs');
 const path          = require('path');
 const crypto        = require('crypto-extra');
 
+
+
 const hbs      = require('nodemailer-express-handlebars'),
  email         = process.env.MAILER_EMAIL_ID || 'dealss400@gmail.com',
  pass          = process.env.MAILER_PASSWORD || 'thakurpeople1997',
  nodemailer    = require('nodemailer');
-
-
 var smtpTransport = nodemailer.createTransport({
   service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
   auth: {
@@ -18,7 +18,6 @@ var smtpTransport = nodemailer.createTransport({
     pass: pass
   }
 });
-
 
 var handlebarsOptions = {
   viewEngine: 'handlebars',
@@ -67,10 +66,11 @@ module.exports = {
 
     await newUser.save();
 
-    // Generate the token
-    const token = signToken(newUser);
-    // Respond with token
-    res.status(200).json({ token });
+    // // Generate the token
+    // const token = signToken(newUser);
+    // // Respond with token
+    // res.status(200).json({ token });
+    res.status(200).json({newUser})
   },
 
   signIn: async (req, res, next) => {
@@ -97,7 +97,7 @@ module.exports = {
   //   }
 
   // },
-
+  
   forgot_password:(req, res, next)=>{
     async.waterfall([
       function(done) {

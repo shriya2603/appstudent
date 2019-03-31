@@ -13,9 +13,20 @@ mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
 
+app.use((req, res, next) => {
+    console.log("Middleware!")
+    next()
+})
+
 //middleware
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
+
 app.use(bodyParser.json());
+
+// app.use((req, res, next) => {
+//     console.log("Middleware!")
+//     next()
+// })
 
 //view 
 app.set('view engine', 'ejs');
