@@ -212,7 +212,7 @@ module.exports = {
     //   });
     // });
 
-      User.findById(req.params.id,function(err, user){
+      User.findById({_id:req.user.id},function(err, user){
         if(!user){
           return res.json({message:'no account found'});
         }
@@ -245,7 +245,7 @@ module.exports = {
   },
 
   deleteUser:(req,res, next)=>{
-    User.findByIdAndRemove({_id:req.params.id}).then(function(user){
+    User.findByIdAndRemove({_id:req.user.id}).then(function(user){
       if(user){
         res.send('deleted user'+user);
       }
@@ -256,9 +256,9 @@ module.exports = {
   },
 
   viewUser:(req, res, next)=>{
-    User.findById({_id:req.params.id}).then(function(user){
+    User.findById({_id:req.user.id}).then(function(user){
       if(user){
-        res.json('user details'+user);
+        res.json(user);
       }
       else{
         res.json({message:'user not found'});
@@ -267,7 +267,7 @@ module.exports = {
   },
 
   changePassword: (req, res, next)=>{
-    User.findById({_id:req.params.id}).then(function(user){
+    User.findById({_id:req.user.id}).then(function(user){
       const oldPassword=req.body.oldPassword;
       const newPassword=req.body.newPassword;
 

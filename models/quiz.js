@@ -3,30 +3,22 @@ const Schema        = mongoose.Schema;
 
 const quizSchema = new Schema({
     question:{type:String},
-    option1:{
       option1:{type:String},
-      point:{type:Number}
-    },
-    option2:{
+      point1:{type:Number},
       option2:{type:String},
-      point:{type:Number}
-    },
-    option3:{
+      point2:{type:Number},
       option3:{type:String},
-      point:{type:Number}
-    },
-    option4:{
+      point3:{type:Number,default:0},
       option4:{type:String},
-      point:{type:Number}
-    },
-    rightAnswer:{type:String},
-    imageName:{type:String},
-    yogaSutra:{type:String},
-    thematic:{type:String,required: true},
-    createdAt:{
-      type: Date, 
-      default: Date.now()
-    }
+      point4:{type:Number,default:0},
+      rightAnswer:{type:String},
+      imageName:{type:String},
+      yogaSutra:{type:String},
+      thematic:{type:String,required: true},
+      createdAt:{
+        type: Date, 
+        default: Date.now()
+      }
 
 });
 

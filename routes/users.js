@@ -20,31 +20,31 @@ router.route('/signup')
 router.route('/signin')
   .post(validateBody(schemas.authSchema), passportSignIn, UsersController.signIn);
 
-router.route('/forgotpassword') //
-  .post(validateBody(schemas.authSchema), UsersController.forgot_password);
+// router.route('/forgotpassword') //
+//   .post(validateBody(schemas.authSchema), UsersController.forgot_password);
 
-router.route('/reset_password') //
-  // .get(UsersController.render_reset_password_template)
-  .post(UsersController.reset_password);
+// router.route('/reset_password') //
+//   // .get(UsersController.render_reset_password_template)
+//   .post(UsersController.reset_password);
 
 router.route('/oauth/google')
   .post(passport.authenticate('googleToken', { session: false }), UsersController.googleOAuth);
 
-//in headers (authorization token) 
+//in headers (x-auth-token: token) 
 router.route('/secret')
   .get(passportJWT, UsersController.secret);
 
-router.route('/update/:id')
-  .put(passportJWT, UsersController.updateUser);
+// router.route('/update')
+//   .put(passportJWT, UsersController.updateUser);
 
-router.route('/delete/:id')
+router.route('/delete')
   .delete(passportJWT, UsersController.deleteUser);
 
-router.route('/view/:id')
-  .get( UsersController.viewUser);
+router.route('/view')
+  .get( passportJWT, UsersController.viewUser);
 
-router.route('/changePassword/:id')//
-  .post(UsersController.changePassword);
+router.route('/changePassword')
+  .post(passportJWT,UsersController.changePassword);
 
 
 
@@ -54,10 +54,12 @@ router.route('/changePassword/:id')//
   router.route('/uploadImage')
     .post(QuizController.uploadImage);
 
-  router.route('/createQuiz')
-    .post(QuizController.createQuiz);
 
-  router.route('/getQuiz')
+
+  // router.route('/getQuiz')
+  //   .get(QuizController.getQuiz);
+
+    router.route('/getQuiz/:thematic')
     .get(QuizController.getQuiz);
 
   router.route('/saveResult')
@@ -70,7 +72,7 @@ router.route('/changePassword/:id')//
     
 
     const storage = multer.diskStorage({
-      destination: './public/uploads/',
+      destination: './uploads',
       filename: function(req, file, callback){
         callback(null,file.originalname + '-' + Date.now() + path.extname(file.originalname));
 
@@ -101,8 +103,12 @@ router.route('/changePassword/:id')//
       }
   }
 
-  router.route('/createQuestion')//
+  router.route('/createQuestion')
     .post(upload.single('myImage'),QuizController.createQuestion);
+
+  router.route('/yogaSutras')
+    .post(QuizController.yogaSutras);
+    
 
   
 

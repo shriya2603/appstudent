@@ -71,34 +71,22 @@ module.exports = {
 
   },
 
-  createQuiz:(req,res)=>{
-    const newQuiz = new Quiz();
-    newQuiz.question=req.body.question;
-    newQuiz.option1.option1=req.body.option1.option1;
-    newQuiz.option1.point=req.body.option1.point;
+  
 
-    newQuiz.option2.option2=req.body.option2.option2;
-    newQuiz.option2.point=req.body.option2.point;
-
-    newQuiz.option3.option3=req.body.option3.option3;
-    newQuiz.option3.point=req.body.option3.point;
-    
-    newQuiz.option4.option4=req.body.option4.option4;
-    newQuiz.option4.point=req.body.option4.point;
-
-    newQuiz.rightAnswer=req.body.rightAnswer;
-    newQuiz.imageName=req.body.imageName;
-    newQuiz.yogaSutra=req.body.yogaSutra;
-    newQuiz.thematic=req.body.thematic;
-    
-    newQuiz.save(function (err) {
-      res.send(newQuiz);
-    });
-
-  },
-
+  // getQuiz:(req, res)=>{
+  //   Quiz.find({thematic:req.body.thematic}).then(function(quiz){
+  //     const question =quiz[Math.floor(Math.random()*quiz.length)];
+  //     // console.log(question);
+  //     if(question!=null){
+  //       res.json({question});
+  //     }
+  //     else{
+  //       res.json({message:'quiz of this thematic not found'});
+  //     }
+  //   });
+  // },
   getQuiz:(req, res)=>{
-    Quiz.find({thematic:req.body.thematic}).then(function(quiz){
+    Quiz.find({thematic:req.params.thematic}).then(function(quiz){
       const question =quiz[Math.floor(Math.random()*quiz.length)];
       // console.log(question);
       if(question!=null){
@@ -133,33 +121,39 @@ module.exports = {
   analysis:(req,res)=>{
     
     Quiz.findById({_id:req.body.id}).then(function(quiz){
-      const o1=quiz.option1.option1;
-      const p1=quiz.option1.point;
+      const o1=quiz.option1;
+      const p1=quiz.point1;
 
-      const o2=quiz.option2.option2;
-      const p2=quiz.option2.point;
+      const o2=quiz.option2;
+      const p2=quiz.point2;
 
-      const o3=quiz.option3.option3;
-      const p3=quiz.option3.point;
+      // const o3=quiz.option3;
+      // const p3=quiz.point3;
 
-      const o4=quiz.option4.option4;
-      const p4=quiz.option4.point;
+      // const o4=quiz.option4;
+      // const p4=quiz.point4;
+      console.log(p1);
+      console.log(p2);
+     
+      
+      // const maxPoint=Math.max(p1,p2,p3,p4);
+      const maxPoint=Math.max(p1,p2);
 
-      const maxPoint=Math.max(p1,p2,p3,p4);
       console.log(maxPoint);
 
       G1=(p1-1)/(maxPoint-1);
       G2=(p2-1)/(maxPoint-1);
-      G3=(p3-1)/(maxPoint-1);
-      G4=(p4-1)/(maxPoint-1);
+      // G3=(p3-1)/(maxPoint-1);
+      // G4=(p4-1)/(maxPoint-1);
 
       Result.find({quizId:req.body.id}).then(function(result){
         // console.log(result[0].userResult);
-
-        let numberUserselected1=1;
-        let numberUserselected2=1;
-        let numberUserselected3=1;
-        let numberUserselected4=1;
+        const r=result.length;
+        // console.log(r);
+        let numberUserselected1=0;
+        let numberUserselected2=0;
+        // let numberUserselected3=0;
+        // let numberUserselected4=0;
         var i=result.length-1;
         do{
           
@@ -175,19 +169,21 @@ module.exports = {
           }
           i=i-1;
         }while(i>0);
-        // console.log(numberUserselected2);
+        console.log(numberUserselected2);
 
-        const percentage1=(numberUserselected1/5);
-        const percentage2=(numberUserselected2/5);
-        const percentage3=(numberUserselected3/5);
-        const percentage4=(numberUserselected4/5);
+        const percentage1=(numberUserselected1/4);
+        const percentage2=(numberUserselected2/4);
+        // const percentage3=(numberUserselected3/5);
+        // const percentage4=(numberUserselected4/5);
+        console.log(percentage2);
 
         const pp1=percentage1*G1;
         const pp2=percentage2*G2;
-        const pp3=percentage3*G3;
-        const pp4=percentage4*G4;
+        // const pp3=percentage3*G3;
+        // const pp4=percentage4*G4;
         
-        const totalGradeScore=pp1+pp2+pp3+pp4;
+        // const totalGradeScore=pp1+pp2+pp3+pp4;
+        const totalGradeScore=pp1+pp2;
         res.json({totalGradeScore});
       });
     });
@@ -195,17 +191,17 @@ module.exports = {
   createQuestion:(req,res)=>{//
     const newQuiz = new Quiz();
     newQuiz.question=req.body.question;
-    newQuiz.option1.option1=req.body.option1.option1;
-    newQuiz.option1.point=req.body.option1.point;
+    newQuiz.option1=req.body.option1;
+    newQuiz.point1=req.body.point1;
 
-    newQuiz.option2.option2=req.body.option2.option2;
-    newQuiz.option2.point=req.body.option2.point;
+    newQuiz.option2=req.body.option2;
+    newQuiz.point2=req.body.point2;
 
-    newQuiz.option3.option3=req.body.option3.option3;
-    newQuiz.option3.point=req.body.option3.point;
+    newQuiz.option3=req.body.option3;
+    newQuiz.point3=req.body.point3;
     
-    newQuiz.option4.option4=req.body.option4.option4;
-    newQuiz.option4.point=req.body.option4.point;
+    newQuiz.option4=req.body.option4;
+    newQuiz.point4=req.body.point4;
 
     newQuiz.rightAnswer=req.body.rightAnswer;
     newQuiz.imageName=req.file.path;
@@ -216,6 +212,15 @@ module.exports = {
       res.send(newQuiz.question);
     });
     
+
+  },
+  yogaSutras:(req,res)=>{
+    Quiz.findById({_id:req.body.id}).then(function(quiz){
+      const quizsutra = new Quiz();
+      const yogaSutra=quiz.yogaSutra;
+      res.json({yogaSutra});
+
+    });
 
   }
 

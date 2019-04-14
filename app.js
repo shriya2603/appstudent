@@ -12,6 +12,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/apiAuth', { useNewUrlParser: true })
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
+app.all('/*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  });
+
 
 app.use((req, res, next) => {
     console.log("Middleware!")
@@ -31,6 +38,7 @@ app.use(bodyParser.json());
 //view 
 app.set('view engine', 'ejs');
 app.use(express.static('./public'));
+app.use(express.static('./uploads'));
 
 //routes
 app.use('/users',require('./routes/users'));
