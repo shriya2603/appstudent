@@ -17,6 +17,8 @@ module.exports  =   {
         authSchema :Joi.object().keys({
             email :Joi.string().email().required(),
             password: Joi.string().min(8).max(20).required().error(new Error('Password must be atleast of 8 characters')),
+            last_name:Joi.string(),
+            first_name:Joi.string(),
             resettoken:Joi.string()
         })
     }

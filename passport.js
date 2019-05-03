@@ -68,7 +68,8 @@ passport.use(new LocalStrategy({
     
     // If not, handle it
     if (!user) {
-      return done(null, false, {message:"user not found "});
+      console.log("hello");
+      return done("user not found ");
     }
     
     // Check if the password is correct
@@ -76,7 +77,7 @@ passport.use(new LocalStrategy({
   
     // If not, handle it
     if (!isMatch) {
-      return done(null, false,{message:"user not found "});
+      return done("wrong Password");
     }
     
     console.log(user);

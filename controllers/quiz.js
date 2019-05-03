@@ -9,84 +9,62 @@ module.exports = {
 
   uploadImage:(req,res)=>{//this is with views
        //set storage engine 
-        const storage = multer.diskStorage({
-            destination: './public/uploads/',
-            filename: function(req, file, callback){
-              callback(null,file.originalname + '-' + Date.now() + path.extname(file.originalname));
+    const storage = multer.diskStorage({
+      destination: './public/uploads/',
+      filename: function(req, file, callback){
+        callback(null,file.originalname + '-' + Date.now() + path.extname(file.originalname));
   
-            }
+      }
 
+    });
+    const upload = multer({
+      storage: storage,
+      // limits:{fileSize: 1000000},
+      fileFilter: function(req, file, cb){
+        checkFileType(file, cb);
+      }
+    }).single('myImage');
+  
+    // Check File Type
+    function checkFileType(file, cb){
+      // Allowed ext
+      const filetypes = /jpeg|jpg|png|gif/;
+      // Check ext
+      const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+      // Check mime
+      const mimetype = filetypes.test(file.mimetype);
+  
+      if(mimetype && extname){
+        return cb(null,true);
+      } else {
+        cb('Error: Images Only!');
+      }
+    }
+    upload(req, res,(err) => {
+      if(err){
+        res.render('index', {
+        msg: err
         });
-        const upload = multer({
-            storage: storage,
-            // limits:{fileSize: 1000000},
-            fileFilter: function(req, file, cb){
-              checkFileType(file, cb);
-            }
-        }).single('myImage');
-  
-        // Check File Type
-        function checkFileType(file, cb){
-            // Allowed ext
-            const filetypes = /jpeg|jpg|png|gif/;
-            // Check ext
-            const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-             // Check mime
-            const mimetype = filetypes.test(file.mimetype);
-  
-            if(mimetype && extname){
-                return cb(null,true);
-            } else {
-                cb('Error: Images Only!');
-            }
-        }
-
-
-          
-          upload(req, res,(err) => {
-            if(err){
-              res.render('index', {
-                msg: err
-              });
-            } else {
-              if(req.file == undefined){
-                res.render('index', {
-                  msg: 'Error: No File Selected!'
-                });
-              } else {
-                      const newImage = new Quiz();
-                      newImage.imageName=req.file.filename;
-                      newImage.save(res.render('index', {
-                        msg: 'File Uploaded!',
-                        file: `/uploads/${req.file.filename}`
-                }));
+      } else {
+          if(req.file == undefined){
+            res.render('index', {
+            msg: 'Error: No File Selected!'
+            });
+          } else {
+            const newImage = new Quiz();
+            newImage.imageName=req.file.filename;
+            newImage.save(res.render('index', {
+              msg: 'File Uploaded!',
+              file: `/uploads/${req.file.filename}`
+            }));
                          
-              }
-            }
-          });
-
-
-
-
-
+          }
+        }
+    });
   },
-
-  
-
-  // getQuiz:(req, res)=>{
-  //   Quiz.find({thematic:req.body.thematic}).then(function(quiz){
-  //     const question =quiz[Math.floor(Math.random()*quiz.length)];
-  //     // console.log(question);
-  //     if(question!=null){
-  //       res.json({question});
-  //     }
-  //     else{
-  //       res.json({message:'quiz of this thematic not found'});
-  //     }
-  //   });
-  // },
+ 
   getQuiz:(req, res)=>{
-    Quiz.find({thematic:req.params.thematic}).then(function(quiz){
+    Quiz.find({thematic:req.body.thematic}).then(function(quiz){
       const question =quiz[Math.floor(Math.random()*quiz.length)];
       // console.log(question);
       if(question!=null){
@@ -114,8 +92,6 @@ module.exports = {
           res.json({ success: true, data: newResult });
       }
     });
-
-
   },
 
   analysis:(req,res)=>{
@@ -156,8 +132,6 @@ module.exports = {
         // let numberUserselected4=0;
         var i=result.length-1;
         do{
-          
-          
           if(result[i].userResult==o1){
             numberUserselected1=numberUserselected1+1;
           }else if(result[i].userResult==o2){

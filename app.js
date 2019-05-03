@@ -3,12 +3,13 @@ const morgan        = require('morgan');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
 
-const ejs 			= require('ejs');
-const path			= require('path');
-const app = express();
+const ejs 			    = require('ejs');
+const path			    = require('path');
 
-//
-mongoose.connect('mongodb://127.0.0.1:27017/apiAuth', { useNewUrlParser: true });
+const app           = express();
+
+//mongoDb database
+mongoose.connect('mongodb://127.0.0.1:27017/apiAuth',{ useNewUrlParser: true });
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
@@ -19,11 +20,6 @@ app.all('/*', function(req, res, next) {
     next();
   });
 
-
-app.use((req, res, next) => {
-    console.log("Middleware!")
-    next()
-})
 
 //middleware
 // app.use(morgan('dev'));
@@ -42,8 +38,6 @@ app.use(express.static('./uploads'));
 
 //routes
 app.use('/users',require('./routes/users'));
-
-
 
 
 //server
